@@ -1,1 +1,119 @@
+//KMP算法
+//这是next数组初始化为-1的情况
+public class KMP{
 
+
+	public int[] getNext(String string) {
+		char objec[]=string.toCharArray();
+		int[] next=new int[objec.length];
+		next[0]=-1;
+		int k=-1;
+		int j=0;
+		while(j<objec.length-1) {
+			if(k==-1||objec[j]==objec[k]) {
+				next[++j]=++k;//当k=-1时，++1使其为0，从而使数组不溢出
+			}
+			else {
+				k=next[k];
+			}
+		}
+		return next;
+	}
+  
+  
+	public int KMP_D(String origin,String objec) {
+		char string1[]=origin.toCharArray();
+		char string2[]=objec.toCharArray();
+		int next[]=this.getNext(objec);
+		int i=0;//目的串
+		int j=0;//模式串
+		while(i<string1.length&&j<string2.length) {
+			if(j==-1||string1[i]==string2[j]) {
+				++i;
+				++j;
+			}
+			else
+			{
+				j=next[j];
+			}
+		}
+		if(j==string2.length)
+		{
+			return i-j;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	public static void main(String[] args) {
+       KMP s=new KMP();
+     System.out.println(s.KMP_D("ABCABCEEBRDHWEQBCEEEQXVBCECWCBCEEBCDCFWDASDA","BCEEBCD"));
+	}
+
+}
+
+/*
+public class KMP_m{
+	public int[] getNext(String string) {
+		char[] array=string.toCharArray();
+		int[] next=new int[array.length];
+		next[0]=0;
+		int k=0;
+		int j=0;
+		while(j<array.length-1)
+		{
+			if(array[j]==array[k]&&j!=0)//解决第一个数问题，即array[0]=array[0],故先排掉第一个数
+			{
+				next[++j]=++k;
+			}
+			else if(k==0)//k=0，无论如何都是next=0，从第一个开始匹配；同时，++j使其能够继续进行
+			{
+				next[++j]=0;
+			}
+			else
+			{
+				k=next[k];
+			}
+		}
+		return next;
+	}
+	//这是next数组初始化为0的方案，可能比较好理解
+	public int KMP_E(String origin,String objec) {
+		char string1[]=origin.toCharArray();
+		char string2[]=objec.toCharArray();
+		int next[]=this.getNext(objec);
+		int i=0;//主串
+		int j=0;//模式串串
+		while(i<string1.length&&j<string2.length) {
+			if(string1[i]==string2[j]) //匹配的话两个串都向后移动一位
+			{
+				++i;
+				++j;
+			}
+			else if(j==0)
+			{
+				++i;//j=0，已经指向模式串第一个字符，这时仍然没有匹配，主串向后移动一位继续
+			}
+			else//比如ABBABA，BA不匹配的话，再看看A匹配否
+			{
+				j=next[j];
+			}
+		}
+		
+		if(j==string2.length)
+		{
+			return i-j;
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	
+	public static void main(String[] args) {
+      KMP_m s=new KMP_m();
+      System.out.println(s.KMP_E("ABCABCEEBRDHWEQBCEEEQXVBCECWCBCEEBCDCFWDASDA","BCEEBCD"));
+	}
+}
+*/
