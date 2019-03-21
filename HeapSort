@@ -1,0 +1,84 @@
+//大根堆排序，小根堆同此思路
+package merge_sort;
+
+public class HeapSort {
+	int not_leaf;//非叶子节点
+	int array_length;//数组长度
+	int temp;//零时变量
+	HeapSort(int []array) {
+		not_leaf=array.length/2-1;
+		array_length=array.length;
+	}
+	public void HeapInitial(int []array,int flag)//flag是为了标记是只有左节点还是同时有左右叶节点
+	{
+		int leaf=2*not_leaf+1;
+		//只有左节点时
+		if(flag%2==0)
+		{
+			if(array[not_leaf]<array[leaf])
+			{
+				temp=array[not_leaf];
+				array[not_leaf]=array[leaf];
+				array[leaf]=temp;
+			}
+		}
+		else
+		{//同时有左右节点
+			if(array[leaf]<array[leaf+1])//左节点小于右节点
+			{
+				if(array[not_leaf]<array[leaf+1])
+				{
+					temp=array[not_leaf];
+			    	array[not_leaf]=array[leaf+1];
+				    array[leaf+1]=temp;
+			    }
+			}
+			else//左节点大于右节点
+			{
+				if(array[not_leaf]<array[leaf])
+				{
+					temp=array[not_leaf];
+			    	array[not_leaf]=array[leaf];
+				    array[leaf]=temp;
+				}
+			}
+		}
+		not_leaf--;//非叶子节点向前移一位
+		flag=1;//因为左右左节点的情况只发生在第一轮递归中，第一轮后，都是同时有左右叶节点
+		while(not_leaf>=0)//如果没有超过根节点(即小于0)
+		{
+			HeapInitial(array,flag);//继续递归，直至到达根节点而完成堆初始化操作
+		}
+	}
+
+	  public void Sort(int []array)//堆初始化函数
+	  {
+		  int flag=array_length;//这是为了判断堆的第一次初始化过程中是只有左叶节点还是有左右叶节点,取等于length是因为没获得一个最大数，便将该最大数提出二叉树中，此时又得重新洗牌
+		  HeapInitial(array,flag);//堆初始化，没获得一个最大值，都要重新继续初始化操作
+		  //取出最大值并放到原数组最后面
+		  temp=array[array_length-1];
+		  array[array_length-1]=array[0];
+		  array[0]=temp;
+		  
+		  --array_length;//将该最大值提出堆中
+		  not_leaf=array_length/2-1;//重新初始化数组非叶子节点数
+		  while(array_length>1) //是否排序完
+		  {
+			  Sort(array);//继续递归取最大数
+		  }
+	  }
+	
+	//测试函数
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		 int myarray[]= {34,12,86,43,87,43,56,45,98,67,45,98,78,13,-12,-32,-21,23,12,-90,23,123,34,236,53,25};
+	       HeapSort s=new HeapSort(myarray);
+	       s.Sort(myarray);
+	       for(int i=0;i<myarray.length;i++)
+	       {
+	    	   System.out.println(myarray[i]);
+	       }
+		
+	}
+
+}
