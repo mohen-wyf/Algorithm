@@ -1,0 +1,81 @@
+package merge_sort;
+public class MergeSort {
+
+	public int[] sort(int []a,int []b) {//排序函数
+		int []com=new int[a.length+b.length];
+		int num=0;
+		int i=0;int j=0;
+		while(i<a.length&&j<b.length) {
+			if(a[i]<b[j])
+			{
+				com[num]=a[i];
+				++i;
+				++num;
+			}
+			else
+			{
+				com[num]=b[j];
+				++j;
+				++num;
+			}
+		}
+		//由于两个数组比较后，肯定有其中一个数组剩下一些比较大的元素，因此，需要将这些元素加进去
+		if(i==a.length)
+		{
+			for(;j<b.length;j++)
+			{
+				com[num]=b[j];
+			    num++;
+			}
+		}
+		else
+		{
+			for(;i<a.length;i++)
+				{
+				  com[num]=a[i];
+			      num++;
+			   }
+		}
+		return com;
+		}
+	//该函数将一个数组分成两个数组，并在此进行递归操作
+	
+	public int[] merge(int []array){
+		//int array_all[]=new int[array.length];
+		int []array1=new int[array.length/2];
+		int []array2=new int[array.length-array.length/2];//解决总数为奇数的情况,这是分成的两个数组是不等长的
+		if(array.length/2>0) {
+			
+			//int temp_array2=0;
+			for(int i=0;i<array.length/2;i++)
+			{
+				array1[i]=array[i];
+			}
+			for(int i=array.length/2;i<array.length;i++)
+			{
+				array2[i-array.length/2]=array[i];
+			//	temp_array2++;
+			}
+			//加入if语句是为了使数组长度为1时不用再进行递归，减少操作次数
+			if(array1.length>1)
+			array1=merge(array1);
+			if(array2.length>1)
+			array2=merge(array2);
+			array=sort(array1,array2);
+		}
+		
+		return array;
+			
+	}
+	//测试代码
+	public static void main(String[] args) {
+       int myarray[]= {34,12,86,43,87,54,67,98,43,76,20,-12,-23,-21,32,-32};
+       MergeSort s=new MergeSort();
+       int []array_m=s.merge(myarray);
+       for(int i=0;i<myarray.length;i++)
+       {
+    	   System.out.println(array_m[i]);
+       }
+	}
+
+}
